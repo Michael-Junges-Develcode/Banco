@@ -2,6 +2,8 @@ import styled from "styled-components/native"
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
+import { DataListProps } from ".";
+import { FlatList } from "react-native";
 
 export const Container = styled.View`
     /* align-items: center; */
@@ -90,4 +92,13 @@ export const Transactions = styled.View`
 export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
     font-family: ${({ theme }) => theme.fonts.regular};
+
+    margin-bottom: 16px;
 `;
+
+export const TransactionList = styled(
+    FlatList as new () => FlatList<DataListProps>
+    ).attrs({
+    showsVerticalScrollIndicator: false,
+    contentContainerStyle: {paddingBottom: 20} 
+})``;
