@@ -4,6 +4,7 @@ import { Register } from './src/screens/Register'
 import theme from './src/global/styles/theme'
 import { ThemeProvider } from "styled-components"
 import { Dashboard } from './src/screens/Dashboard'
+import { CategorySelect } from './src/screens/CategorySelect'
 
 
 export function App() {

@@ -1,0 +1,56 @@
+import React from 'react';
+import { FlatList } from 'react-native';
+import { categories } from '../../utils/categories';
+import { Category, Container, Footer, Header, Icon, Name, Separator, Title } from './styles';
+//import { Button } from '../../components/Form/Button';
+import { Button } from "react-native"
+
+interface Category {
+    key: string;
+    name: string;
+}
+
+export interface Props {
+    category: Category;
+    setCategory: (category: Category) => void;
+    closeCategorySelect: () => void;
+}
+
+export function CategorySelect({ category, setCategory, closeCategorySelect }: Props ) {
+
+    function handleCategorySelect(category: Category) {
+        setCategory(category);
+    }
+
+    return (
+        <Container>
+            <Header>
+                <Title>Categoria</Title>
+            </Header>
+
+            <FlatList
+                data={categories}
+                style={{ flex: 1, width: "100%"}}
+                keyExtractor={(item) => item.key}
+                renderItem={({ item }) => (
+                    <Category>
+                        <Icon name={item.icon} />
+                        <Name>{item.name}</Name>
+                    </Category>
+                )}
+                ItemSeparatorComponent={() => <Separator />} 
+            />
+
+            <Footer>
+                {/* <Button 
+                    title="Selecionar"
+                    onPress={closeSelectCategory}
+                    /> */}
+                <Button
+                    title="Selecionar"
+                    onPress={closeCategorySelect} 
+                />
+            </Footer>
+        </Container>
+    )
+}
