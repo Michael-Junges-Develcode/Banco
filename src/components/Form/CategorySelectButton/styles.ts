@@ -19,6 +19,6 @@ export const Category = styled.Text`
 `; 
 
 export const Icon = styled(IconFeather)`
-    font-size: ${RFValue(20)};
+    font-size: ${RFValue(20)}px;
     color: ${({ theme }) => theme.colors.text};
 `;

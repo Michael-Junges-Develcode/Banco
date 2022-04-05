@@ -12,9 +12,7 @@ interface ContainerProps {
     type: "up" | "down";
 }
 
-export const Container = styled(TouchableOpacity).attrs({
-    activeOpacity: 0.8
-})<ContainerProps>`
+export const Container = styled(TouchableOpacity)<ContainerProps>`
     width: 48%;
     flex-direction: row;
     justify-content: center;
@@ -35,7 +33,7 @@ export const Container = styled(TouchableOpacity).attrs({
 `;
 
 export const Icon = styled(IconFeather)<IconProps>`
-    font-size: ${RFValue(24)};
+    font-size: ${RFValue(24)}px;
     margin-right: 12px;
 
     color: ${({ theme, type }) =>

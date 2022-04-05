@@ -2,9 +2,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { categories } from '../../utils/categories';
 import { Category, Container, Footer, Header, Icon, Name, Separator, Title } from './styles';
-//import { Button } from '../../components/Form/Button';
-import { Button } from "react-native"
-
+import { Button } from '../../components/Form/Button';
 interface Category {
     key: string;
     name: string;
@@ -33,7 +31,10 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
                 style={{ flex: 1, width: "100%"}}
                 keyExtractor={(item) => item.key}
                 renderItem={({ item }) => (
-                    <Category>
+                    <Category
+                        onPress={() => handleCategorySelect(item)}
+                        isActive={item.key === category.key}
+                    >
                         <Icon name={item.icon} />
                         <Name>{item.name}</Name>
                     </Category>
@@ -42,10 +43,6 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
             />
 
             <Footer>
-                {/* <Button 
-                    title="Selecionar"
-                    onPress={closeSelectCategory}
-                    /> */}
                 <Button
                     title="Selecionar"
                     onPress={closeCategorySelect} 
