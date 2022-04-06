@@ -4,6 +4,7 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
 import { DataListProps } from ".";
 import { FlatList } from "react-native";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
     /* align-items: center; */
@@ -61,6 +62,8 @@ export const UserName = styled.Text`
     font-family: ${({ theme }) => theme.fonts.medium};
 `;
 
+export const LogoutButton = styled(BorderlessButton)``;
+
 export const Icon = styled(IconFeather)`
     color: ${({ theme }) => theme.colors.secondary};
     font-size: ${RFValue(24)}px;
@@ -78,15 +81,13 @@ export const HighlightCards = styled.ScrollView.attrs({
     contentContainerStyle: { paddingHorizontal: 24 }
 })`
     width: 100%;
-    position: absolute;
-    margin-top: ${RFPercentage(20)}px;
 `;
 
 export const Transactions = styled.View`
     flex: 1%;
     padding: 0 24px;
     
-    margin-top: ${RFPercentage(12)}px;
+    margin-top: ${RFPercentage(4)}px;
 `;
 
 export const Title = styled.Text`

@@ -15,6 +15,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
     font-size: ${RFValue(14)}px;
     font-family: ${({ theme }) => theme.fonts.regular};
+    color: ${({ theme }) => theme.colors.text_dark};
 `;
 
 export const Amount = styled.Text<TransactionProps>`
