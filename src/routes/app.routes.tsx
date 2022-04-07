@@ -5,7 +5,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Dashboard } from '../screens/Dashboard'
 import { Register } from '../screens/Register'
 import { RFValue } from "react-native-responsive-fontsize"
-const { Navigator, Screen } = createBottomTabNavigator()
+
+export type AppRoutesParamList = {
+    Home: undefined; // <- undefined = rota não requer parâmetros.
+    Cadastro: undefined;
+    Resumo: undefined;
+  };
+
+  
+
+const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>()
 
 export function AppRoutes() {
 

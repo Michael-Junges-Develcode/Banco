@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { 
     Modal,
     TouchableWithoutFeedback, 
@@ -8,13 +8,22 @@ import {
 import { Container, Form, Header, Title, Fields, TransactionsType } from './styles';
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { AppRoutesParamList } from "../../routes/app.routes";
 import { InputForm } from '../../components/Form/InputForm';
 import { Button } from '../../components/Form/Button';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelect } from '../CategorySelect';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
+import { v4 as uuidv4 } from 'uuid';
 
+type RegisterNavigationProps = BottomTabNavigationProp<
+  AppRoutesParamList,
+  "Cadastro"
+>;
 interface FormData {
     name: string;
     amount: string;
@@ -39,9 +48,14 @@ export function Register() {
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
+    const dataKey = "@kaelbank:transactions";
+
+    const navigation = useNavigation<RegisterNavigationProps>();
+
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm({
         resolver: yupResolver(schema)
@@ -59,7 +73,7 @@ export function Register() {
         setCategoryModalOpen(false);
     }
 
-    function handleRegister(form: Partial<FormData>) {
+    async function handleRegister(form: Partial<FormData>) {
 
         if(!transactionType)
             return Alert.alert("Erro", "Selecione o tipo da transação");
@@ -67,22 +81,57 @@ export function Register() {
         if(category.key === "category")
             return Alert.alert("Erro", "Selecione uma categoria");
 
-        if(!form.name)
-            return Alert.alert("Erro", "Informe o nome da transação");
-
-        if(!form.amount)
-            return Alert.alert("Erro", "Informe o valor da transação");
-
         Alert.alert("Sucesso", "Transação registrada com sucesso");
     
-        const data = {
+        const newTransaction = {
+            id: String(uuidv4()),
             name: form.name,
             amount: form.amount,
             category: category.key,
-            transactionType
+            transactionType,
+            date: new Date()
         }
-        console.log(data);
+
+        try {
+            const data = await AsyncStorage.getItem(dataKey);
+            const currentData = data ? JSON.parse(data) : [];
+            const dataFormatted = [
+                ...currentData,
+                newTransaction
+            ];
+            await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
+
+            reset();
+            setTransactionType('');
+            setCategory({
+                key: "category",
+                name: "Categoria"
+            });
+
+            navigation.navigate("Home")
+
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Erro", "Ocorreu um erro ao registrar a transação");
+        }
     }
+
+    useEffect(() => {
+        async function loadData() {
+            const data = await AsyncStorage.getItem(dataKey);
+            console.log(JSON.parse(data!));
+        }
+
+        loadData();
+
+        // async function removeAll() {
+
+        //     await AsyncStorage.removeItem(dataKey);
+        // }
+
+        // removeAll();
+    },[]);
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>

@@ -16,7 +16,6 @@ import {
     HighlightCards,
     Transactions,
     Title,
-    TransactionList,
     LogoutButton,
 } from './styles'
 
@@ -96,6 +95,7 @@ export function Dashboard() {
                     marginTop: RFPercentage(-25),
                 }}
             >
+                <View>
                     <HighlightCards>
                         <HighlightCard
                             type="up"
@@ -116,13 +116,16 @@ export function Dashboard() {
 
                     <Transactions>
                         <Title>Listagem</Title>
-                        <TransactionList
+                        {data.map(item => (<TransactionCard key={item.id} data={item} />))}
+
+                        {/* <TransactionList
                             data={data}
                             keyExtractor={(item: DataListProps) => item.id}
                             renderItem={({ item }) => <TransactionCard data={item} />}
-                        />
+                        /> */}
 
                     </Transactions>
+                </View>
             </ScrollView>
         </Container>
     )
