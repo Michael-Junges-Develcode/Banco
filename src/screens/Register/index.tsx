@@ -63,7 +63,7 @@ export function Register() {
         resolver: yupResolver(schema)
     });
 
-    function handleTransactionsTypeSelect(type: "up" | "down") {
+    function handleTransactionsTypeSelect(type: "positive" | "negative") {
         setTransactionType(type);
     }
 
@@ -90,7 +90,7 @@ export function Register() {
             name: form.name,
             amount: form.amount,
             category: category.key,
-            transactionType,
+            type: transactionType,
             date: new Date()
         }
 
@@ -98,8 +98,8 @@ export function Register() {
             const data = await AsyncStorage.getItem(dataKey);
             const currentData = data ? JSON.parse(data) : [];
             const dataFormatted = [
-                ...currentData,
-                newTransaction
+                newTransaction,
+                ...currentData
             ];
             await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
 
@@ -125,13 +125,6 @@ export function Register() {
         }
 
         loadData();
-
-        // async function removeAll() {
-
-        //     await AsyncStorage.removeItem(dataKey);
-        // }
-
-        // removeAll();
     },[]);
 
     return (
@@ -163,14 +156,14 @@ export function Register() {
                             <TransactionTypeButton
                                 type="up"
                                 title="Income"
-                                onPress={() => handleTransactionsTypeSelect("up")}
-                                isActive={transactionType === "up"}
+                                onPress={() => handleTransactionsTypeSelect("positive")}
+                                isActive={transactionType === "positive"}
                             />
                             <TransactionTypeButton
                                 type="down"
                                 title="Outcome"
-                                onPress={() => handleTransactionsTypeSelect("down")}
-                                isActive={transactionType === "down"}
+                                onPress={() => handleTransactionsTypeSelect("negative")}
+                                isActive={transactionType === "negative"}
                             />
                         </TransactionsType>
 
