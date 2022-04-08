@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { AppRoutesParamList } from "../../routes/app.routes";
 import { InputForm } from '../../components/Form/InputForm';
@@ -18,11 +18,13 @@ import { Button } from '../../components/Form/Button';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelect } from '../CategorySelect';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+
 type RegisterNavigationProps = BottomTabNavigationProp<
-  AppRoutesParamList,
-  "Cadastro"
+    AppRoutesParamList,
+    "Cadastro"
 >;
 interface FormData {
     name: string;

@@ -12,8 +12,6 @@ export type AppRoutesParamList = {
     Resumo: undefined;
   };
 
-  
-
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>()
 
 export function AppRoutes() {
