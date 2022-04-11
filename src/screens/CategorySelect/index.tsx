@@ -3,6 +3,7 @@ import { FlatList } from 'react-native';
 import { categories } from '../../utils/categories';
 import { Category, Container, Footer, Header, Icon, Name, Separator, Title } from './styles';
 import { Button } from '../../components/Form/Button';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 interface Category {
     key: string;
     name: string;
@@ -19,26 +20,22 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
         setCategory(category);
     }
 
-    return (
-        <Container>
-            <Header>
-                <Title>Categoria</Title>
-            </Header>
-
+    const RootView = gestureHandlerRootHOC(() => (
+        <>
             <FlatList
-                data={categories}
-                style={{ flex: 1, width: "100%"}}
-                keyExtractor={(item) => item.key}
-                renderItem={({ item }) => (
-                    <Category
-                        onPress={() => handleCategorySelect(item)}
-                        isActive={item.key === category.key}
-                    >
-                        <Icon name={item.icon} />
-                        <Name>{item.name}</Name>
-                    </Category>
-                )}
-                ItemSeparatorComponent={() => <Separator />} 
+            data={categories}
+            style={{ flex: 1, width: "100%"}}
+            keyExtractor={(item) => item.key}
+            renderItem={({ item }) => (
+                <Category
+                    onPress={() => handleCategorySelect(item)}
+                    isActive={item.key === category.key}
+                >
+                    <Icon name={item.icon} />
+                    <Name>{item.name}</Name>
+                </Category>
+            )}
+            ItemSeparatorComponent={() => <Separator />} 
             />
 
             <Footer>
@@ -47,6 +44,16 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
                     onPress={closeCategorySelect} 
                 />
             </Footer>
+        </>
+    ))
+
+    return (
+        <Container>
+            <Header>
+                <Title>Categoria</Title>
+            </Header>
+
+            <RootView />
         </Container>
     )
 }

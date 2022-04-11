@@ -1,6 +1,7 @@
 import React from 'react'
+import { View } from 'react-native';
 import { RectButtonProps } from 'react-native-gesture-handler';
-import { Container, Icon, Title } from './styles'
+import { ButtonView, Container, Icon, Title } from './styles'
 
 const icons = {
   up: "arrow-up-circle",
@@ -10,16 +11,20 @@ interface Props extends RectButtonProps {
   title: string;
   type: "up" | "down";
   isActive: boolean;
+  onPress: () => void;
 }
 
-export function TransactionTypeButton({ isActive, title, type, ...rest }: Props) {
+export function TransactionTypeButton({ onPress, isActive, title, type, ...rest }: Props) {
   return (
-    <Container
+    <Container 
+      onPress={onPress}
       isActive={isActive}
       type={type}
-      {...rest}>
-      <Icon type={type} name={icons[type]} />
-      <Title>{title}</Title>
+      {...rest}>  
+        <ButtonView accessible accessibilityRole="button">
+            <Icon type={type} name={icons[type]} />
+            <Title>{title}</Title>
+        </ButtonView>
     </Container>
   )
 }

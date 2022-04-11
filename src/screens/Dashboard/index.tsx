@@ -100,7 +100,7 @@ export function Dashboard() {
 
     const lastTransactionEntries = getLastTransactionDate(transactions, 'positive');
     const lastTransactionExpenses = getLastTransactionDate(transactions, 'negative');
-
+    const totalInterval = `01 a ${lastTransactionExpenses}`;
 
     const total = entriesSum - expensesSum;
 
@@ -124,7 +124,7 @@ export function Dashboard() {
           style: 'currency',
           currency: 'BRL'
         }),
-        lastTransaction: ''
+        lastTransaction: totalInterval
       }
     });
     setIsLoading(false);
@@ -186,7 +186,7 @@ export function Dashboard() {
                     type="total"
                     title="Total"
                     amount={highlightData.total.amount}
-                    lastTransaction='Março de 2022' />
+                    lastTransaction={highlightData.total.lastTransaction} />
                 </HighlightCards>
 
                 <Transactions>

@@ -32,6 +32,13 @@ export const Container = styled(RectButton)<ContainerProps>`
     background-color: ${({ theme }) => theme.colors.attention_light};`};
 `;
 
+export const ButtonView = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const Icon = styled(IconFeather)<IconProps>`
     font-size: ${RFValue(24)}px;
     margin-right: 12px;
