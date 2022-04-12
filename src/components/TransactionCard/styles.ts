@@ -1,11 +1,12 @@
 import styled from "styled-components/native";
 import IconFeather from "react-native-vector-icons/Feather";
 import { RFValue } from "react-native-responsive-fontsize";
+import { RectButton } from "react-native-gesture-handler";
 interface TransactionProps {
     type: "positive" | "negative";
 }
 
-export const Container = styled.View`
+export const Container = styled(RectButton)`
     background-color: ${({ theme }) => theme.colors.shape};
     border-radius: 20px;
     padding: 17px 24px;

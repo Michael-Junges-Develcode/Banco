@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
-import { ScrollView, View, ActivityIndicator } from 'react-native';
+import { ScrollView, View, ActivityIndicator, Alert } from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { HighlightCard } from '../../components/HighlightCard'
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard'
@@ -43,6 +43,7 @@ export function Dashboard() {
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
 
+  const dataKey = "@kaelbank:transactions";
   const theme = useTheme();
 
   function getLastTransactionDate(
@@ -58,7 +59,7 @@ export function Dashboard() {
   }
 
   async function loadTransactions() {
-    const dataKey = "@kaelbank:transactions";
+    
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
 
@@ -130,6 +131,28 @@ export function Dashboard() {
     setIsLoading(false);
   }
 
+  async function handleRemoveCard(transactionId: string) {
+    const response = await AsyncStorage.getItem(dataKey);
+    const storedTransactions = response ? JSON.parse(response) : [];
+  
+    const filteredTransactions = storedTransactions.filter(transaction => transaction.id !== transactionId);
+  
+    setTransactions(filteredTransactions);
+    await AsyncStorage.setItem(dataKey, JSON.stringify(filteredTransactions));
+
+    loadTransactions()
+  }
+  function alerta(name: string, id: string,) {
+    Alert.alert(`Você deseja deletar ${String(name)}?`,
+    "",
+    [
+      {text: 'Cancelar', },
+      {text: 'Deletar', onPress: () => handleRemoveCard(id) },
+    ],
+      {cancelable: false}
+    )}
+  
+
   useEffect(() => {
     loadTransactions();
   }, []);
@@ -165,8 +188,8 @@ export function Dashboard() {
             </Header>
             <ScrollView
               style={{
-                flex: 1,
-                marginTop: RFPercentage(-25),
+                // flex: 1,
+                marginTop: RFPercentage(-17),
               }}
             >
               <View>
@@ -191,7 +214,7 @@ export function Dashboard() {
 
                 <Transactions>
                   <Title>Listagem</Title>
-                  {transactions.map(item => (<TransactionCard key={item.id} data={item} />))}
+                  {transactions.map(item => (<TransactionCard onPress={ () => alerta(item.name, item.id)} key={item.id} data={item} />))}
                 </Transactions>
 
               </View>

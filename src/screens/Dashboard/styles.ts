@@ -2,8 +2,8 @@ import styled from "styled-components/native"
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import IconFeather from 'react-native-vector-icons/Feather';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
-import { DataListProps } from ".";
-import { FlatList } from "react-native";
+// import { DataListProps } from ".";
+// import { FlatList } from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
@@ -14,7 +14,7 @@ export const Container = styled.View`
 
 export const Header = styled.View`
     width: 100%;
-    height: ${RFPercentage(42)}px;
+    height: ${RFPercentage(35)}px;
     background-color: ${({ theme }) => theme.colors.primary};
     
     justify-content: center;
@@ -24,7 +24,7 @@ export const Header = styled.View`
 
 export const UserWrapper = styled.View`
     width: 100%;
-    padding: 0 24px;
+    padding: 10px 24px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -78,13 +78,13 @@ export const IconePerfil = styled(IconAwesome)`
 export const HighlightCards = styled.ScrollView.attrs({
     horizontal: true,
     showsHorizontalScrollIndicator: false,
-    contentContainerStyle: { paddingHorizontal: 24 }
+    contentContainerStyle: { paddingHorizontal: 15 }
 })`
-    width: 100%;
+    /* width: 100%; */
 `;
 
 export const Transactions = styled.View`
-    flex: 1%;
+    /* flex: 1; */
     padding: 0 24px;
     
     margin-top: ${RFPercentage(4)}px;
