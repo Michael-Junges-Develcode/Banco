@@ -135,7 +135,7 @@ export function Dashboard() {
     const response = await AsyncStorage.getItem(dataKey);
     const storedTransactions = response ? JSON.parse(response) : [];
   
-    const filteredTransactions = storedTransactions.filter(transaction => transaction.id !== transactionId);
+    const filteredTransactions = storedTransactions.filter((transaction: DataListProps) => transaction.id !== transactionId);
   
     setTransactions(filteredTransactions);
     await AsyncStorage.setItem(dataKey, JSON.stringify(filteredTransactions));
@@ -151,11 +151,6 @@ export function Dashboard() {
     ],
       {cancelable: false}
     )}
-  
-
-  useEffect(() => {
-    loadTransactions();
-  }, []);
 
   useFocusEffect(useCallback(() => {
     loadTransactions();
