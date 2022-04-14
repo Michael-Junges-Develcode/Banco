@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components"
 import { NavigationContainer } from '@react-navigation/native'
 import { AppRoutes } from './src/routes/app.routes'
 import { SignIn } from './src/screens/SignIn'
+import { AuthProvider } from './src/hooks/auth'
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
@@ -17,7 +18,9 @@ export function App() {
                     <StatusBar barStyle="light-content" backgroundColor="transparent"
                     translucent 
                     />
-                    <SignIn />
+                    <AuthProvider>
+                        <SignIn />
+                    </AuthProvider>
                 </NavigationContainer>
             </ThemeProvider>
         </GestureHandlerRootView>

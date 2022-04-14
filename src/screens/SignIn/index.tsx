@@ -1,11 +1,12 @@
-import React from 'react'
-// import { Image } from 'react-native'
+import React, { useContext } from 'react'
 import { SignInSocialButton } from '../../components/SignInSocialButton'
-
+import { useAuth } from '../../hooks/auth';
 import { Container, Footer, FooterWrapper, Header, Logo, SignInTitle, Title, TitleWrapper } from './styles'
 
 export function SignIn() {
-    
+    const { user } = useAuth();
+    console.log(user);
+
     return (
         <Container>
             <Header>
