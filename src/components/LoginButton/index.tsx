@@ -8,7 +8,7 @@ interface Props extends RectButtonProps {
     source: ImageProps['source']
 }
 
-export function SignInSocialButton({ title, source, ...rest }: Props) {
+export function LoginButton({ title, source, ...rest }: Props) {
     return(
         <Button {...rest}>
             <ImageContainer>

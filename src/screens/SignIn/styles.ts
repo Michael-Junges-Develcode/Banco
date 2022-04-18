@@ -1,6 +1,7 @@
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { Image } from 'react-native'
+import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
     flex: 1;
@@ -50,8 +51,27 @@ export const Footer = styled.View`
     flex: 1;
 `;
 
-export const FooterWrapper = styled.View`
+export const LoginWrapper = styled.View`
     margin-top: ${RFPercentage(-4)}px;
     padding: 0 32px;
     justify-content: space-between;
+`;
+
+export const CreateAccountWrapper = styled.View`
+    flex-direction: row;
+    justify-content: center;
+`;
+
+export const CreateAccountButton = styled(BorderlessButton)`
+    margin-left: 5px;
+`;
+
+export const CreateAccountText = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.regular};
+    color: ${({ theme }) => theme.colors.shape};
+`;
+
+export const ButtonText = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.regular};
+    color: ${({ theme }) => theme.colors.primary};
 `;

@@ -1,8 +1,25 @@
-import React from 'react'
-import { SignInSocialButton } from '../../components/SignInSocialButton'
-import { Container, Footer, FooterWrapper, Header, Logo, SignInTitle, Title, TitleWrapper } from './styles'
+import React, { useState } from 'react'
+import { LoginButton } from '../../components/LoginButton'
+import { Container, Footer, LoginWrapper, Header, Logo, SignInTitle, Title, TitleWrapper, CreateAccountWrapper, CreateAccountButton, ButtonText, CreateAccountText } from './styles'
+import auth from '@react-native-firebase/auth'
+import { Alert, Modal, Text } from 'react-native'
+import { SignInModal } from '../SignInModal'
 
 export function SignIn() {  
+    const [signInModalOpen, setSignInModalOpen] = useState(false);
+
+    function handleOpenModal() {
+        setSignInModalOpen(true);
+    }
+
+    function handleCloseModal() {
+        setSignInModalOpen(false);
+    }
+
+    async function handleSignInAnonimously() {
+        const { user } = await auth().signInAnonymously();
+        console.log(user);
+    }  
 
     return (
         <Container>
@@ -21,16 +38,29 @@ export function SignIn() {
             </Header>
 
             <Footer>
-                <FooterWrapper>
-                    <SignInSocialButton 
+                <LoginWrapper>
+                    <LoginButton 
                     title="Entrar com Google"
+                    onPress={handleSignInAnonimously}
                     source={require('../../assets/icons/google.png')}
                     />
-                    <SignInSocialButton 
-                    title="Entrar com Apple"
-                    source={require('../../assets/icons/apple.png')}/>
-                </FooterWrapper>
+                    <LoginButton 
+                    title="Entrar com email e senha"
+                    onPress={handleOpenModal}
+                    source={require('../../assets/icons/o-email.png')}
+                    />
+                    <CreateAccountWrapper>
+                        <CreateAccountText>Não tem uma conta?</CreateAccountText>
+                        <CreateAccountButton onPress={handleOpenModal}>
+                            <ButtonText>Criar conta</ButtonText>
+                        </CreateAccountButton>
+                    </CreateAccountWrapper>
+                    
+                </LoginWrapper>
             </Footer>
+            <Modal visible={signInModalOpen}>
+                <SignInModal closeSignInModal={handleCloseModal}/>
+            </Modal>
         </Container>
     )
 }
