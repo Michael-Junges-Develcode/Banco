@@ -4,9 +4,12 @@ import { Container, Footer, LoginWrapper, Header, Logo, SignInTitle, Title, Titl
 import auth from '@react-native-firebase/auth'
 import { Alert, Modal, Text } from 'react-native'
 import { SignInModal } from '../SignInModal'
+import { useForm } from 'react-hook-form'
 
 export function SignIn() {  
     const [signInModalOpen, setSignInModalOpen] = useState(false);
+
+    const { control } = useForm()
 
     function handleOpenModal() {
         setSignInModalOpen(true);
@@ -59,7 +62,9 @@ export function SignIn() {
                 </LoginWrapper>
             </Footer>
             <Modal visible={signInModalOpen}>
-                <SignInModal closeSignInModal={handleCloseModal}/>
+                <SignInModal 
+                    closeSignInModal={handleCloseModal}
+                    />
             </Modal>
         </Container>
     )

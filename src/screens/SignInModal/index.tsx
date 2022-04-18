@@ -5,24 +5,26 @@ import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import auth from '@react-native-firebase/auth'
 import { TextInputProps } from 'react-native';
-import { Control, Controller } from 'react-hook-form'
+import { Control, useForm } from 'react-hook-form'
+import { InputCreateAccount } from '../../components/Form/InputCreateAccount';
 
-export interface Props extends TextInputProps {
+export interface Props {
     closeSignInModal: () => void;
-    control: Control;
-    name: string;
-    error: string;
 }
 
 export function SignInModal({
-    control,
-    name,
-    closeSignInModal,
-    ...rest
+    closeSignInModal
 }: Props) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState
+    } = useForm()
 
     function handleCreateUserAccount() {
         auth()
@@ -32,32 +34,22 @@ export function SignInModal({
 
     const RootView = gestureHandlerRootHOC(() => (
         <>
-            <Controller
+            <InputCreateAccount
+                name="email"
+                placeholder='Email'
+                keyboardType="email-address"    
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                    <>
-                        <Input
-                            placeholder='Email'
-                            keyboardType='email-address'
-                            onChangeText={onChange}
-                            value={value}
-                            {...rest}
-                        />
-                        <Input
-                            placeholder='Senha'
-                            secureTextEntry
-                            onChangeText={onChange}
-                            value={value}
-                            {...rest} 
-                        />
-                    </>
-                )}
-                <Button
-                title="Selecionar"
-                onPress={
-                    closeSignInModal}
-                
-                />
+            />
+            <InputCreateAccount
+                name="password"
+                placeholder='Senha'
+                secureTextEntry={true}
+                control={control}
+            />
+            <Button
+                title="Criar conta"
+                onPress={handleCreateUserAccount}  
+            />
         </>
     ))
 
