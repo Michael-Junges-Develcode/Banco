@@ -23,5 +23,9 @@ export default {
         regular: "Poppins-Regular",
         medium: "Poppins-Medium",
         bold: "Poppins-Bold"
+    },
+    rippleColor: {
+        primary: 'rgba(103, 52, 255, 0.8)',
+        secondary: 'rgba(255, 135, 44, 0.8)',
     }
 }

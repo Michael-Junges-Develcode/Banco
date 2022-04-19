@@ -62,16 +62,18 @@ export const CreateAccountWrapper = styled.View`
     justify-content: center;
 `;
 
-export const CreateAccountButton = styled(BorderlessButton)`
-    margin-left: 5px;
+export const CreateAccountButton = styled(BorderlessButton).attrs({
+    rippleColor: 'rgba(255, 135, 44, 0.8)'
+})`
+    margin-left: 10px;
 `;
 
 export const CreateAccountText = styled.Text`
-    font-family: ${({ theme }) => theme.fonts.regular};
+    font-family: ${({ theme }) => theme.fonts.medium};
     color: ${({ theme }) => theme.colors.shape};
 `;
 
 export const ButtonText = styled.Text`
-    font-family: ${({ theme }) => theme.fonts.regular};
+    font-family: ${({ theme }) => theme.fonts.medium};
     color: ${({ theme }) => theme.colors.primary};
 `;

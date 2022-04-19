@@ -9,7 +9,6 @@ import { useTheme } from 'styled-components';
 import {
   Container,
   Header,
-  Icon,
   Photo,
   User,
   UserGreeting,
@@ -19,9 +18,9 @@ import {
   HighlightCards,
   Transactions,
   Title,
-  LogoutButton,
-  LoadContainer,
+  LoadContainer
 } from './styles'
+import { LogoutButton } from '../../components/LogoutButton';
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -37,7 +36,11 @@ interface HighlightData {
   total: HighlightProps;
 }
 
-export function Dashboard() {
+interface Props {
+  onPress: () => void;
+}
+
+export function Dashboard({ onPress } : Props) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
@@ -176,14 +179,11 @@ export function Dashboard() {
                     <UserName>Michael</UserName>
                   </User>
                 </UserInfo>
-                <LogoutButton onPress={() => { }}>
-                  <Icon name="power" />
-                </LogoutButton>
+                <LogoutButton name={'power'} onPress={onPress} />
               </UserWrapper>
             </Header>
             <ScrollView
               style={{
-                // flex: 1,
                 marginTop: RFPercentage(-17),
               }}
             >

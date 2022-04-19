@@ -2,20 +2,27 @@ import React, { useState } from 'react'
 import { LoginButton } from '../../components/LoginButton'
 import { Container, Footer, LoginWrapper, Header, Logo, SignInTitle, Title, TitleWrapper, CreateAccountWrapper, CreateAccountButton, ButtonText, CreateAccountText } from './styles'
 import auth from '@react-native-firebase/auth'
-import { Alert, Modal, Text } from 'react-native'
+import { Modal } from 'react-native'
 import { SignInModal } from '../SignInModal'
-import { useForm } from 'react-hook-form'
+import { LogInModal } from '../LogInModal'
 
 export function SignIn() {  
     const [signInModalOpen, setSignInModalOpen] = useState(false);
+    const [logInModalOpen, setlogInModalOpen] = useState(false);
 
-    const { control } = useForm()
+    function handleOpenLoginModal() {
+        setlogInModalOpen(true);
+    }
 
-    function handleOpenModal() {
+    function handleCloseLoginModal() {
+        setlogInModalOpen(false);
+    }
+
+    function handleOpenSigninModal() {
         setSignInModalOpen(true);
     }
 
-    function handleCloseModal() {
+    function handleCloseSigninModal() {
         setSignInModalOpen(false);
     }
 
@@ -49,12 +56,12 @@ export function SignIn() {
                     />
                     <LoginButton 
                     title="Entrar com email e senha"
-                    onPress={handleOpenModal}
+                    onPress={handleOpenLoginModal}
                     source={require('../../assets/icons/o-email.png')}
                     />
                     <CreateAccountWrapper>
                         <CreateAccountText>Não tem uma conta?</CreateAccountText>
-                        <CreateAccountButton onPress={handleOpenModal}>
+                        <CreateAccountButton onPress={handleOpenSigninModal}>
                             <ButtonText>Criar conta</ButtonText>
                         </CreateAccountButton>
                     </CreateAccountWrapper>
@@ -63,8 +70,13 @@ export function SignIn() {
             </Footer>
             <Modal visible={signInModalOpen}>
                 <SignInModal 
-                    closeSignInModal={handleCloseModal}
-                    />
+                    closeSignInModal={handleCloseSigninModal}
+                />    
+            </Modal>
+            <Modal visible={logInModalOpen}>
+                <LogInModal 
+                    closeLoginModal={handleCloseLoginModal}
+                />
             </Modal>
         </Container>
     )

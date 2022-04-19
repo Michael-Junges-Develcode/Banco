@@ -9,6 +9,7 @@ import { SignIn } from './src/screens/SignIn'
 import auth from '@react-native-firebase/auth';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
+import { Routes } from './src/routes'
 
 export function App() {
 
@@ -49,7 +50,7 @@ export function App() {
                     <StatusBar barStyle="light-content" backgroundColor="transparent"
                         translucent
                     />
-                    <SignIn />
+                    <Routes />
                 </NavigationContainer>
             </ThemeProvider>
         </GestureHandlerRootView>

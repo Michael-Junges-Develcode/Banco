@@ -11,6 +11,7 @@ export type AppRoutesParamList = {
     Home: undefined; // <- undefined = rota não requer parâmetros.
     Cadastro: undefined;
     Resumo: undefined;
+    Login: undefined;
   };
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>()
@@ -63,6 +64,7 @@ export function AppRoutes() {
                     )
                 }}
             />
+
         </Navigator>
     )
 }

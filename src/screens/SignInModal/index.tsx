@@ -1,59 +1,73 @@
-import React, { useState } from 'react'
-import { Alert } from 'react-native';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { Button } from '../../components/Form/Button';
-import { Input } from '../../components/Form/Input';
+import React, { useEffect, useState } from 'react';
+import { Alert, Keyboard } from 'react-native';
 import auth from '@react-native-firebase/auth'
-import { TextInputProps } from 'react-native';
-import { Control, useForm } from 'react-hook-form'
-import { InputCreateAccount } from '../../components/Form/InputCreateAccount';
+import { GestureHandlerView, Container, TextInput, Button2, Title, Form } from './styles';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export interface Props {
     closeSignInModal: () => void;
 }
 
-export function SignInModal({
-    closeSignInModal
-}: Props) {
+export function SignInModal({ closeSignInModal }: Props) {
 
     const [email, setEmail] = useState('');
+
     const [password, setPassword] = useState('');
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        formState
-    } = useForm()
-
     function handleCreateUserAccount() {
+        if (email === '' || password === '') {
+            Alert.alert('Conta inválida.', 'Preencha todos os campos para criar uma conta');
+            return
+        }
         auth()
             .createUserWithEmailAndPassword(email, password)
             .then(() => Alert.alert('Usuário criado com sucesso!'))
+            .catch(error => {
+                Alert.alert("Erro", error.message);
+                console.log(error)
+            });
+        closeSignInModal();
     }
 
-    const RootView = gestureHandlerRootHOC(() => (
-        <>
-            <InputCreateAccount
-                name="email"
-                placeholder='Email'
-                keyboardType="email-address"    
-                control={control}
-            />
-            <InputCreateAccount
-                name="password"
-                placeholder='Senha'
-                secureTextEntry={true}
-                control={control}
-            />
-            <Button
-                title="Criar conta"
-                onPress={handleCreateUserAccount}  
-            />
-        </>
-    ))
-
     return (
-        <RootView />
+
+        <GestureHandlerView>
+            <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                style={{ flex: 1 }}
+                containerStyle={{ flex: 1 }}
+            >
+                <Container>
+
+                    <Title>Criar conta</Title>
+
+                    <Form>
+                    <TextInput
+                        value={email}
+                        key={'email'}
+                        placeholder='Email'
+                        keyboardType="email-address"
+                        onChangeText={setEmail}
+                    />
+                    <TextInput
+                        value={password}
+                        key={'password'}
+                        placeholder='Senha'
+                        secureTextEntry
+                        onChangeText={setPassword}
+                    />
+                    <Button2
+                        title="Criar conta"
+                        onPress={handleCreateUserAccount}
+                    />
+                    <Button2
+                        title="Voltar"
+                        onPress={closeSignInModal}
+                    />
+                    </Form>
+
+                </Container>
+            </TouchableWithoutFeedback >
+        </GestureHandlerView>
     )
 }
