@@ -1,11 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
-import { ScrollView, View, ActivityIndicator, Alert } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ScrollView, View, ActivityIndicator, Alert, Modal } from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { HighlightCard } from '../../components/HighlightCard'
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard'
 import { useTheme } from 'styled-components';
+import auth from '@react-native-firebase/auth';
 import {
   Container,
   Header,
@@ -20,7 +22,8 @@ import {
   Title,
   LoadContainer
 } from './styles'
-import { LogoutButton } from '../../components/LogoutButton';
+import { OptionsButton } from '../../components/OptionsButton';
+import { Options } from '../Options';
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -36,33 +39,51 @@ interface HighlightData {
   total: HighlightProps;
 }
 
-interface Props {
-  onPress: () => void;
+const Stack = createNativeStackNavigator();
+
+export function Dashboard() {
+  return (
+    <Stack.Navigator 
+      initialRouteName="Início" 
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen  name="Início" component={Home} />
+      <Stack.Screen name="Opções" component={OptionsScreen} />
+    </Stack.Navigator>
+  )
 }
 
-export function Dashboard({ onPress } : Props) {
+function Home({ navigation }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
 
-  const dataKey = "@kaelbank:transactions";
+  const username: string | null | undefined = auth().currentUser?.displayName;
+
+  const userUid = auth().onAuthStateChanged(user => {
+    return user?.uid
+  })
+
+  const dataKey = `@kaelbank:transactions_user:${userUid}`;
   const theme = useTheme();
 
   function getLastTransactionDate(
-      collection: DataListProps[], 
-      type: 'positive' | 'negative'
-  ){
+    collection: DataListProps[],
+    type: 'positive' | 'negative'
+  ) {
     const lastTransaction = new Date(
-    Math.max.apply(Math, collection
-    .filter(transaction => transaction.type === "positive")
-    .map(transaction => new Date(transaction.date).getTime())));
+      Math.max.apply(Math, collection
+        .filter(transaction => transaction.type === "positive")
+        .map(transaction => new Date(transaction.date).getTime())));
 
     return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', { month: 'long' })}`;
   }
 
   async function loadTransactions() {
-    
+
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
 
@@ -137,23 +158,25 @@ export function Dashboard({ onPress } : Props) {
   async function handleRemoveCard(transactionId: string) {
     const response = await AsyncStorage.getItem(dataKey);
     const storedTransactions = response ? JSON.parse(response) : [];
-  
+
     const filteredTransactions = storedTransactions.filter((transaction: DataListProps) => transaction.id !== transactionId);
-  
+
     setTransactions(filteredTransactions);
     await AsyncStorage.setItem(dataKey, JSON.stringify(filteredTransactions));
 
     loadTransactions()
   }
+
   function alerta(name: string, id: string,) {
     Alert.alert(`Você deseja deletar ${String(name)}?`,
-    "",
-    [
-      {text: 'Cancelar', },
-      {text: 'Deletar', onPress: () => handleRemoveCard(id) },
-    ],
-      {cancelable: false}
-    )}
+      "",
+      [
+        { text: 'Cancelar', },
+        { text: 'Deletar', onPress: () => handleRemoveCard(id) },
+      ],
+      { cancelable: false }
+    )
+  }
 
   useFocusEffect(useCallback(() => {
     loadTransactions();
@@ -176,10 +199,10 @@ export function Dashboard({ onPress } : Props) {
                   <Photo source={{ uri: "https://lh3.googleusercontent.com/a-/AOh14GjIG7LBgeDuaKH7BDqzTsuhOcHib-4Q-RBw7vHY=s288-p-no" }} />
                   <User>
                     <UserGreeting>Olá, </UserGreeting>
-                    <UserName>Michael</UserName>
+                    <UserName>{username}</UserName>
                   </User>
                 </UserInfo>
-                <LogoutButton name={'power'} onPress={onPress} />
+                <OptionsButton name={'power'} onPress={() => navigation.navigate('Opções')} />
               </UserWrapper>
             </Header>
             <ScrollView
@@ -199,7 +222,7 @@ export function Dashboard({ onPress } : Props) {
                     type="down"
                     title="Saídas"
                     amount={highlightData.expenses.amount}
-                    lastTransaction={highlightData.expenses.lastTransaction}  />
+                    lastTransaction={highlightData.expenses.lastTransaction} />
                   <HighlightCard
                     type="total"
                     title="Total"
@@ -209,7 +232,7 @@ export function Dashboard({ onPress } : Props) {
 
                 <Transactions>
                   <Title>Listagem</Title>
-                  {transactions.map(item => (<TransactionCard onPress={ () => alerta(item.name, item.id)} key={item.id} data={item} />))}
+                  {transactions.map(item => (<TransactionCard onPress={() => alerta(item.name, item.id)} key={item.id} data={item} />))}
                 </Transactions>
 
               </View>
@@ -220,4 +243,14 @@ export function Dashboard({ onPress } : Props) {
     </Container>
   )
 }
+
+function OptionsScreen({ navigation }) {
+    return (
+      <Options onPress={() => navigation.popToTop()}/>
+    )
+}
+
+
+
+
 

@@ -12,10 +12,12 @@ export function SignInModal({ closeSignInModal }: Props) {
 
     const [email, setEmail] = useState('');
 
+    const [username, setUsername] = useState('');
+
     const [password, setPassword] = useState('');
 
     function handleCreateUserAccount() {
-        if (email === '' || password === '') {
+        if (email === '' || password === '' || username === '') {
             Alert.alert('Conta inválida.', 'Preencha todos os campos para criar uma conta');
             return
         }
@@ -26,6 +28,10 @@ export function SignInModal({ closeSignInModal }: Props) {
                 Alert.alert("Erro", error.message);
                 console.log(error)
             });
+        auth().currentUser?.updateProfile({
+            displayName: username
+            
+        })
         closeSignInModal();
     }
 
@@ -48,6 +54,12 @@ export function SignInModal({ closeSignInModal }: Props) {
                         placeholder='Email'
                         keyboardType="email-address"
                         onChangeText={setEmail}
+                    />
+                    <TextInput
+                        value={username}
+                        key={'username'}
+                        placeholder='Nome de usuário'
+                        onChangeText={setUsername}
                     />
                     <TextInput
                         value={password}

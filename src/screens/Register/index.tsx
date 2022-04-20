@@ -4,6 +4,7 @@ import {
     Keyboard,
     Alert 
 } from 'react-native';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import { Container, Form, Header, Title, Fields, TransactionsType } from './styles';
 import * as Yup from "yup";
@@ -31,6 +32,10 @@ interface FormData {
     amount: string;
 }
 
+interface User {
+    
+}
+
 const schema = Yup.object().shape({
     name: Yup
         .string().required("O nome é obrigatório"),
@@ -47,10 +52,14 @@ export function Register() {
         name: "Categoria"
     });
 
+    const userUid: User | null = auth().onAuthStateChanged(user => {
+        return user?.uid
+    });
+
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
-    const dataKey = "@kaelbank:transactions";
+    const dataKey = `@kaelbank:transactions_user:${userUid}`;
 
     const navigation = useNavigation<RegisterNavigationProps>();
 

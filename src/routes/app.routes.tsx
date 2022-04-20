@@ -14,14 +14,14 @@ export type AppRoutesParamList = {
     Login: undefined;
   };
 
-const { Navigator, Screen } = createBottomTabNavigator<AppRoutesParamList>()
+const Tab = createBottomTabNavigator<AppRoutesParamList>()
 
 export function AppRoutes() {
 
     const theme = useTheme()
 
     return (
-        <Navigator
+        <Tab.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarActiveTintColor: theme.colors.secondary,
@@ -37,16 +37,16 @@ export function AppRoutes() {
                 }
             }}
         >
-            <Screen 
+            <Tab.Screen 
                 name="Home" 
                 component={Dashboard}
                 options={{
                     tabBarIcon: (({ size, color }) => 
                         <Icon name="home" size={size} color={color} />
-                    )
+                    )                      
                 }}
             />
-            <Screen 
+            <Tab.Screen 
                 name="Cadastro" 
                 component={Register}
                 options={{
@@ -55,7 +55,7 @@ export function AppRoutes() {
                     )
                 }}
             />
-            <Screen 
+            <Tab.Screen 
                 name="Resumo" 
                 component={Resume}
                 options={{
@@ -65,6 +65,6 @@ export function AppRoutes() {
                 }}
             />
 
-        </Navigator>
+        </Tab.Navigator>
     )
 }

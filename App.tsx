@@ -13,36 +13,6 @@ import { Routes } from './src/routes'
 
 export function App() {
 
-    // const [initializing, setInitializing] = useState(true);
-    // const [user, setUser] = useState();
-
-    // function onAuthStateChanged(user) {
-    //     setUser(user);
-    //     if (initializing) setInitializing(false);
-    // }
-
-    // useEffect(() => {
-    //     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    //     return subscriber; 
-    // }, []);
-
-    // if (initializing) return null;
-
-    // if (!user) {
-    //     return (
-    //         <GestureHandlerRootView style={{ flex: 1 }}>
-    //             <ThemeProvider theme={theme}>
-    //                 <NavigationContainer>
-    //                     <StatusBar barStyle="light-content" backgroundColor="transparent"
-    //                         translucent
-    //                     />
-    //                     <SignIn />
-    //                 </NavigationContainer>
-    //             </ThemeProvider>
-    //         </GestureHandlerRootView>
-    //     )
-    // }
-
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider theme={theme}>
