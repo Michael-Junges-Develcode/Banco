@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { LoginButton } from '../../components/LoginButton'
 import { Container, Footer, LoginWrapper, Header, Logo, SignInTitle, Title, TitleWrapper, CreateAccountWrapper, CreateAccountButton, ButtonText, CreateAccountText } from './styles'
 import auth from '@react-native-firebase/auth'
 import { Modal } from 'react-native'
 import { SignInModal } from '../SignInModal'
 import { LogInModal } from '../LogInModal'
+import { Modalize } from 'react-native-modalize'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export function SignIn() {  
     const [signInModalOpen, setSignInModalOpen] = useState(false);
     const [logInModalOpen, setlogInModalOpen] = useState(false);
+
+    const modalizeRef = useRef<Modalize>(null);
+
+    function onOpen() {
+    modalizeRef.current?.open();
+    };
+
+    function onClose() {
+        modalizeRef.current?.close();
+        };
 
     function handleOpenLoginModal() {
         setlogInModalOpen(true);
@@ -27,8 +39,7 @@ export function SignIn() {
     }
 
     async function handleSignInAnonimously() {
-        const { user } = await auth().signInAnonymously();
-        console.log(user);
+        auth().signInAnonymously();
     }  
 
     return (
@@ -37,8 +48,8 @@ export function SignIn() {
                 <TitleWrapper>
                     <Logo />
                     <Title>
-                        Controle suas finanças
-                        de forma muito simples
+                        Controle suas {"\n"} finanças
+                        de forma {"\n"} muito simples
                     </Title>
                 </TitleWrapper>
 
@@ -61,18 +72,20 @@ export function SignIn() {
                     />
                     <CreateAccountWrapper>
                         <CreateAccountText>Não tem uma conta?</CreateAccountText>
-                        <CreateAccountButton onPress={handleOpenSigninModal}>
+                        <CreateAccountButton onPress={onOpen}>
                             <ButtonText>Criar conta</ButtonText>
                         </CreateAccountButton>
                     </CreateAccountWrapper>
                     
                 </LoginWrapper>
             </Footer>
-            <Modal visible={signInModalOpen}>
+           
+            <Modalize ref={modalizeRef}>
                 <SignInModal 
-                    closeSignInModal={handleCloseSigninModal}
+                    closeSignInModal={onClose}
                 />    
-            </Modal>
+            </Modalize>
+            
             <Modal visible={logInModalOpen}>
                 <LogInModal 
                     closeLoginModal={handleCloseLoginModal}

@@ -20,19 +20,20 @@ export interface TransactionCardProps {
 }
 
 interface Props extends RectButtonProps {
-    onPress: () => void;
+    onLongPress: () => void;
 }
+
 interface Props {
     data: TransactionCardProps; 
 }
 
-export function TransactionCard({ data, onPress }: Props) {
+export function TransactionCard({ data, onLongPress }: Props) {
     const [ category ] = categories.filter(
         item => item.key === data.category
     );
 
   return (
-    <Container onPress={onPress}>
+    <Container onPress={onLongPress}>
         <Title>{data.name}</Title>
 
         <Amount type={data.type}>

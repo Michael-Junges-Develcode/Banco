@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, Keyboard, Text } from 'react-native';
+import React from 'react';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import auth from '@react-native-firebase/auth'
-import { BackButton, Container, Header, OptionsWrapper, Title } from './styles';
+import { BackButton, Buttons, Container, Header, OptionsWrapper, Title, View } from './styles';
 
 interface Props {
     onPress: () => void;
@@ -14,18 +14,25 @@ export function Options({ onPress }: Props) {
     }
 
     return (
-        
+        <GestureHandlerRootView style={{ flex: 1 }}>
             <Container>
+
                 <Header>
                     <Title>Opções</Title>
                 </Header>
                 
-                <OptionsWrapper>
-                <Text>MICHAEL</Text>
-                <BackButton title={"Voltar"} onPress={onPress}/>
-                </OptionsWrapper>
+                <View>
+                    <OptionsWrapper>
+                    <Buttons title={"Sair da conta atual"} onPress={handleLogout}/>
+                    </OptionsWrapper>
+                    
+                    <BackButton>
+                    <Buttons title={"Voltar"} onPress={onPress}/>
+                    </BackButton> 
+                </View>
 
             </Container>
+        </GestureHandlerRootView>
        
     )
 }

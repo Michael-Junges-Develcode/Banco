@@ -13,7 +13,6 @@ export function Routes() {
 
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(user => {
-            console.log(user)
             setUser(user)   
         });
         return subscriber;

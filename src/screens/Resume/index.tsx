@@ -12,7 +12,7 @@ import { ptBR } from 'date-fns/locale'
 import { ActivityIndicator } from 'react-native'
 import { LoadContainer } from '../Dashboard/styles'
 import { useFocusEffect } from '@react-navigation/native'
-import auth from '@react-native-firebase/auth'
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 
 interface TransactionData {
   type: 'positive' | 'negative';
@@ -32,7 +32,8 @@ interface CategoryData {
 }
 
 interface User {
-
+  username: FirebaseAuthTypes.User['displayName'];
+  uid: FirebaseAuthTypes.User['uid'];
 }
 
 export function Resume() {
@@ -40,9 +41,7 @@ export function Resume() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
   
-  const userUid: User | null = auth().onAuthStateChanged(user => {
-    return user?.uid
-  });
+  const user: User = auth().currentUser;
 
   const theme = useTheme();
 
@@ -54,7 +53,7 @@ export function Resume() {
 
   async function loadData() {
     setIsLoading(true);
-    const dataKey = `@kaelbank:transactions_user:${userUid}`;
+    const dataKey = `@kaelbank:transactions_user:${user.uid}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

@@ -32,8 +32,9 @@ interface FormData {
     amount: string;
 }
 
-interface User {
-    
+type User = {
+    username: FirebaseAuthTypes.User['displayName'];
+    uid: FirebaseAuthTypes.User['uid']; 
 }
 
 const schema = Yup.object().shape({
@@ -52,14 +53,12 @@ export function Register() {
         name: "Categoria"
     });
 
-    const userUid: User | null = auth().onAuthStateChanged(user => {
-        return user?.uid
-    });
+    const user: User = auth().currentUser;
 
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
-    const dataKey = `@kaelbank:transactions_user:${userUid}`;
+    const dataKey = `@kaelbank:transactions_user:${user.uid}`;
 
     const navigation = useNavigation<RegisterNavigationProps>();
 

@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { ScrollView, View, ActivityIndicator, Alert, Modal } from 'react-native';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { HighlightCard } from '../../components/HighlightCard'
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard'
 import { useTheme } from 'styled-components';
-import auth from '@react-native-firebase/auth';
+import auth, { firebase, FirebaseAuthTypes } from '@react-native-firebase/auth';
 import {
   Container,
   Header,
@@ -33,13 +33,14 @@ interface HighlightProps {
   amount: string;
   lastTransaction: string;
 }
+
 interface HighlightData {
   entries: HighlightProps;
   expenses: HighlightProps;
   total: HighlightProps;
 }
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export function Dashboard() {
   return (
@@ -60,15 +61,11 @@ function Home({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
-
-  const username: string | null | undefined = auth().currentUser?.displayName;
-
-  const userUid = auth().onAuthStateChanged(user => {
-    return user?.uid
-  })
-
-  const dataKey = `@kaelbank:transactions_user:${userUid}`;
   const theme = useTheme();
+  
+  const user = auth().currentUser;
+
+  const dataKey = `@kaelbank:transactions_user:${user?.uid}`;
 
   function getLastTransactionDate(
     collection: DataListProps[],
@@ -82,77 +79,77 @@ function Home({ navigation }) {
     return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', { month: 'long' })}`;
   }
 
+    
   async function loadTransactions() {
+      const response = await AsyncStorage.getItem(dataKey);
+      const transactions = response ? JSON.parse(response) : [];
 
-    const response = await AsyncStorage.getItem(dataKey);
-    const transactions = response ? JSON.parse(response) : [];
+      let entriesSum = 0;
+      let expensesSum = 0;
 
-    let entriesSum = 0;
-    let expensesSum = 0;
+      const transactionsFormatted: DataListProps[] = transactions
+        .map((item: DataListProps) => {
 
-    const transactionsFormatted: DataListProps[] = transactions
-      .map((item: DataListProps) => {
+          if (item.type === "positive") {
+            entriesSum += Number(item.amount);
+          } else {
+            expensesSum += Number(item.amount);
+          }
 
-        if (item.type === "positive") {
-          entriesSum += Number(item.amount);
-        } else {
-          expensesSum += Number(item.amount);
-        }
+          const amount = Number(item.amount)
+            .toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            })
 
-        const amount = Number(item.amount)
-          .toLocaleString('pt-BR', {
+          const date = Intl.DateTimeFormat('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit'
+          }).format(new Date(item.date));
+
+          return {
+            id: item.id,
+            name: item.name,
+            amount,
+            type: item.type,
+            category: item.category,
+            date
+          }
+        }); 
+
+      setTransactions(transactionsFormatted);
+
+      const lastTransactionEntries = getLastTransactionDate(transactions, 'positive');
+      const lastTransactionExpenses = getLastTransactionDate(transactions, 'negative');
+      const totalInterval = `01 a ${lastTransactionExpenses}`;
+
+      const total = entriesSum - expensesSum;
+
+      setHighlightData({
+        entries: {
+          amount: entriesSum.toLocaleString('pt-BR', {
             style: 'currency',
             currency: 'BRL'
-          })
-
-        const date = Intl.DateTimeFormat('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: '2-digit'
-        }).format(new Date(item.date));
-
-        return {
-          id: item.id,
-          name: item.name,
-          amount,
-          type: item.type,
-          category: item.category,
-          date
+          }),
+          lastTransaction: `Última entrada dia ${lastTransactionEntries}`
+        },
+        expenses: {
+          amount: expensesSum.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }),
+          lastTransaction: `Última saída dia ${lastTransactionExpenses}`
+        },
+        total: {
+          amount: total.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }),
+          lastTransaction: totalInterval
         }
       });
-
-    setTransactions(transactionsFormatted);
-
-    const lastTransactionEntries = getLastTransactionDate(transactions, 'positive');
-    const lastTransactionExpenses = getLastTransactionDate(transactions, 'negative');
-    const totalInterval = `01 a ${lastTransactionExpenses}`;
-
-    const total = entriesSum - expensesSum;
-
-    setHighlightData({
-      entries: {
-        amount: entriesSum.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }),
-        lastTransaction: `Última entrada dia ${lastTransactionEntries}`
-      },
-      expenses: {
-        amount: expensesSum.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }),
-        lastTransaction: `Última saída dia ${lastTransactionExpenses}`
-      },
-      total: {
-        amount: total.toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }),
-        lastTransaction: totalInterval
-      }
-    });
-    setIsLoading(false);
+      setIsLoading(false);
   }
 
   async function handleRemoveCard(transactionId: string) {
@@ -196,10 +193,10 @@ function Home({ navigation }) {
             <Header>
               <UserWrapper>
                 <UserInfo>
-                  <Photo source={{ uri: "https://lh3.googleusercontent.com/a-/AOh14GjIG7LBgeDuaKH7BDqzTsuhOcHib-4Q-RBw7vHY=s288-p-no" }} />
+                  <Photo source={{ uri: "https://www.iconsdb.com/icons/preview/white/user-xxl.png" }} />
                   <User>
                     <UserGreeting>Olá, </UserGreeting>
-                    <UserName>{username}</UserName>
+                    <UserName>{ user?.displayName }</UserName>
                   </User>
                 </UserInfo>
                 <OptionsButton name={'power'} onPress={() => navigation.navigate('Opções')} />
@@ -207,7 +204,7 @@ function Home({ navigation }) {
             </Header>
             <ScrollView
               style={{
-                marginTop: RFPercentage(-17),
+                marginTop: RFPercentage(-17)
               }}
             >
               <View>
@@ -232,7 +229,7 @@ function Home({ navigation }) {
 
                 <Transactions>
                   <Title>Listagem</Title>
-                  {transactions.map(item => (<TransactionCard onPress={() => alerta(item.name, item.id)} key={item.id} data={item} />))}
+                  {transactions.map(item => (<TransactionCard onLongPress={() => alerta(item.name, item.id)} key={item.id} data={item} />))}
                 </Transactions>
 
               </View>

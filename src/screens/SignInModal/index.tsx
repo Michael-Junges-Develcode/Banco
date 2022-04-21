@@ -1,43 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, Keyboard } from 'react-native';
-import auth from '@react-native-firebase/auth'
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { GestureHandlerView, Container, TextInput, Button2, Title, Form } from './styles';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Modalize } from 'react-native-modalize';
 
-export interface Props {
+interface Props {
     closeSignInModal: () => void;
 }
 
-export function SignInModal({ closeSignInModal }: Props) {
+// type User = {
+//     username: FirebaseAuthTypes.User['displayName'];
+//     uid: FirebaseAuthTypes.User['uid']; 
+// }
 
+export function SignInModal({ closeSignInModal }: Props) {
+    
     const [email, setEmail] = useState('');
 
     const [username, setUsername] = useState('');
 
     const [password, setPassword] = useState('');
 
-    function handleCreateUserAccount() {
-        if (email === '' || password === '' || username === '') {
-            Alert.alert('Conta inválida.', 'Preencha todos os campos para criar uma conta');
-            return
-        }
-        auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(() => Alert.alert('Usuário criado com sucesso!'))
-            .catch(error => {
-                Alert.alert("Erro", error.message);
-                console.log(error)
-            });
-        auth().currentUser?.updateProfile({
-            displayName: username
-            
-        })
-        closeSignInModal();
-    }
+    // console.log(typeof(username));
+    // console.log(username)
+
+        async function createUserAccount() {
+           
+                if (email === '' || password === '' || username === '') {
+                    Alert.alert('Conta inválida.', 'Preencha todos os campos para criar uma conta');
+                    return
+                }
+
+                await auth()
+                .createUserWithEmailAndPassword(email, password)
+                .catch(() => {
+                    Alert.alert('Erro ao criar conta', 'Verifique seus dados e tente novamente.');
+                    return
+                });  
+                const user = auth().currentUser;
+                await user?.updateProfile({
+                displayName: username
+                })    
+        }   
 
     return (
 
-        <GestureHandlerView>
+        //<GestureHandlerView>
             <TouchableWithoutFeedback
                 onPress={Keyboard.dismiss}
                 style={{ flex: 1 }}
@@ -70,7 +79,7 @@ export function SignInModal({ closeSignInModal }: Props) {
                     />
                     <Button2
                         title="Criar conta"
-                        onPress={handleCreateUserAccount}
+                        onPress={createUserAccount}
                     />
                     <Button2
                         title="Voltar"
@@ -80,6 +89,6 @@ export function SignInModal({ closeSignInModal }: Props) {
 
                 </Container>
             </TouchableWithoutFeedback >
-        </GestureHandlerView>
+       // </GestureHandlerView>
     )
 }

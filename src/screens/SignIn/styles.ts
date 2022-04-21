@@ -71,9 +71,11 @@ export const CreateAccountButton = styled(BorderlessButton).attrs({
 export const CreateAccountText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.medium};
     color: ${({ theme }) => theme.colors.shape};
+    font-size: ${RFValue(14)}px;
 `;
 
 export const ButtonText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.medium};
     color: ${({ theme }) => theme.colors.primary};
+    font-size: ${RFValue(14)}px;
 `;
