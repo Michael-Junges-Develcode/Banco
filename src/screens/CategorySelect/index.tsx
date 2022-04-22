@@ -20,8 +20,12 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
         setCategory(category);
     }
 
-    const RootView = gestureHandlerRootHOC(() => (
-        <>
+    return (
+        <Container>
+            <Header>
+                <Title>Categoria</Title>
+            </Header>
+
             <FlatList
             data={categories}
             style={{ flex: 1, width: "100%"}}
@@ -44,16 +48,6 @@ export function CategorySelect({ category, setCategory, closeCategorySelect }: P
                     onPress={closeCategorySelect} 
                 />
             </Footer>
-        </>
-    ))
-
-    return (
-        <Container>
-            <Header>
-                <Title>Categoria</Title>
-            </Header>
-
-            <RootView />
         </Container>
     )
 }

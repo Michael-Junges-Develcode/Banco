@@ -31,17 +31,12 @@ interface CategoryData {
   percent: string;
 }
 
-interface User {
-  username: FirebaseAuthTypes.User['displayName'];
-  uid: FirebaseAuthTypes.User['uid'];
-}
-
 export function Resume() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
   
-  const user: User = auth().currentUser;
+  const user = auth().currentUser;
 
   const theme = useTheme();
 
@@ -53,7 +48,7 @@ export function Resume() {
 
   async function loadData() {
     setIsLoading(true);
-    const dataKey = `@kaelbank:transactions_user:${user.uid}`;
+    const dataKey = `@kaelbank:transactions_user:${user?.uid}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

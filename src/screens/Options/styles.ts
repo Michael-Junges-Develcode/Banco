@@ -43,4 +43,5 @@ export const BackButton = styled.View`
 
 export const Buttons = styled(Button)`
     margin-bottom: 15px;
+    background-color: ${({ theme }) => theme.colors.primary};
 `;

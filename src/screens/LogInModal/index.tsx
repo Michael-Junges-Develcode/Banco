@@ -26,50 +26,46 @@ export function LogInModal({ closeLoginModal }: Props) {
             .catch(error => {
                 Alert.alert("Erro", error.message);
                 console.log(error)
-            });
-
-        closeLoginModal();
+            });   
     }
 
     return (
 
-        <GestureHandlerView>
-            <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}
-                style={{ flex: 1 }}
-                containerStyle={{ flex: 1 }}
-            >
-                <Container>
+        <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            style={{ flex: 1 }}
+            containerStyle={{ flex: 1 }}
+        >
+            <Container>
 
-                    <Title>KaelFinances</Title>
+                <Title>KaelFinances</Title>
 
-                    <Form>
-                        <TextInput
-                            value={email}
-                            key={'email'}
-                            placeholder='Email'
-                            keyboardType="email-address"
-                            onChangeText={setEmail}
-                        />
-                        <TextInput
-                            value={password}
-                            key={'password'}
-                            placeholder='Senha'
-                            secureTextEntry
-                            onChangeText={setPassword}
-                        />
-                        <Button2
-                            title="Entrar"
-                            onPress={handleLoginUserAccount}
-                        />
-                        <Button2
-                            title="Voltar"
-                            onPress={closeLoginModal}
-                        />
-                    </Form>
-                    
-                </Container>
-            </TouchableWithoutFeedback>
-        </GestureHandlerView>
+                <Form>
+                    <TextInput
+                        value={email}
+                        key={'email'}
+                        placeholder='Email'
+                        keyboardType="email-address"
+                        onChangeText={setEmail}
+                    />
+                    <TextInput
+                        value={password}
+                        key={'password'}
+                        placeholder='Senha'
+                        secureTextEntry
+                        onChangeText={setPassword}
+                    />
+                    <Button2
+                        title="Entrar"
+                        onPress={handleLoginUserAccount}
+                    />
+                    <Button2
+                        title="Voltar"
+                        onPress={closeLoginModal}
+                    />
+                </Form>
+
+            </Container>
+        </TouchableWithoutFeedback>
     )
 }

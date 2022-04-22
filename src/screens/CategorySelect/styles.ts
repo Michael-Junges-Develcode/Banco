@@ -28,7 +28,9 @@ export const Title = styled.Text`
     font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled(RectButton)<CategoryProps>`
+export const Category = styled(RectButton).attrs({
+    activeTintColor: theme.colors.shape
+})<CategoryProps>`
     flex-direction: row;
     padding: ${RFValue(15)}px;
     flex-direction: row;

@@ -32,11 +32,6 @@ interface FormData {
     amount: string;
 }
 
-type User = {
-    username: FirebaseAuthTypes.User['displayName'];
-    uid: FirebaseAuthTypes.User['uid']; 
-}
-
 const schema = Yup.object().shape({
     name: Yup
         .string().required("O nome é obrigatório"),
@@ -53,12 +48,12 @@ export function Register() {
         name: "Categoria"
     });
 
-    const user: User = auth().currentUser;
+    const user = auth().currentUser;
 
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
-    const dataKey = `@kaelbank:transactions_user:${user.uid}`;
+    const dataKey = `@kaelbank:transactions_user:${user?.uid}`;
 
     const navigation = useNavigation<RegisterNavigationProps>();
 
@@ -128,8 +123,7 @@ export function Register() {
 
     useEffect(() => {
         async function loadData() {
-            const data = await AsyncStorage.getItem(dataKey);
-            console.log(JSON.parse(data!));
+            await AsyncStorage.getItem(dataKey);
         }
 
         loadData();
@@ -166,12 +160,14 @@ export function Register() {
 
                         <TransactionsType>
                             <TransactionTypeButton
+                                rippleColor = "rgba(18, 164, 84, 0.5)"
                                 type="up"
                                 title="Income"
                                 onPress={() => handleTransactionsTypeSelect("positive")}
                                 isActive={transactionType === "positive"}
                             />
                             <TransactionTypeButton
+                                rippleColor = "rgba(232, 63, 91, 0.5)"
                                 type="down"
                                 title="Outcome"
                                 onPress={() => handleTransactionsTypeSelect("negative")}

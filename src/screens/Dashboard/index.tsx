@@ -7,7 +7,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import { HighlightCard } from '../../components/HighlightCard'
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard'
 import { useTheme } from 'styled-components';
-import auth, { firebase, FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import {
   Container,
   Header,
@@ -196,10 +196,10 @@ function Home({ navigation }) {
                   <Photo source={{ uri: "https://www.iconsdb.com/icons/preview/white/user-xxl.png" }} />
                   <User>
                     <UserGreeting>Olá, </UserGreeting>
-                    <UserName>{ user?.displayName }</UserName>
+                    <UserName>{ user ? user.displayName : "convidado(a)" }</UserName>
                   </User>
                 </UserInfo>
-                <OptionsButton name={'power'} onPress={() => navigation.navigate('Opções')} />
+                <OptionsButton name={'log-out'} onPress={() => navigation.navigate('Opções')} />
               </UserWrapper>
             </Header>
             <ScrollView
@@ -214,12 +214,14 @@ function Home({ navigation }) {
                     type="up"
                     title="Entradas"
                     amount={highlightData.entries.amount}
-                    lastTransaction={highlightData.entries.lastTransaction} />
+                    lastTransaction = {
+                      null ? "Nenhuma transação efetuada" : highlightData.entries.lastTransaction
+                    } />
                   <HighlightCard
                     type="down"
                     title="Saídas"
                     amount={highlightData.expenses.amount}
-                    lastTransaction={highlightData.expenses.lastTransaction} />
+                    lastTransaction= { null ? "Nenhuma transação efetuada" : highlightData.expenses.lastTransaction} />
                   <HighlightCard
                     type="total"
                     title="Total"

@@ -3,16 +3,12 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Button } from "../../components/Form/Button";
 
-export const GestureHandlerView = styled(GestureHandlerRootView)`
-    flex: 1;
-`;
-
 export const Container = styled.View`
     justify-content: space-evenly;
     align-items: center;
     background-color: ${({ theme }) => theme.colors.background};
-    
-    padding: 0 42px;
+    padding: 24px;
+    padding-bottom: ${RFPercentage(10)}px;
 `;
 
 export const Title = styled.Text`
@@ -21,13 +17,12 @@ export const Title = styled.Text`
     font-family: ${({ theme }) => theme.fonts.medium};
     color: ${({ theme }) => theme.colors.text_dark};
     font-size: ${RFValue(32)}px;
-    padding-top: ${RFPercentage(15)}px;
+    padding-top: ${RFPercentage(5)}px;
 `;
 
 export const Form = styled.View`
     width: 100%;  
-    padding-top: ${RFPercentage(10)}px;
-    padding-bottom: ${RFPercentage(100)}px;
+    padding-top: ${RFPercentage(5)}px;
 `;
 
 export const TextInput = styled.TextInput`

@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import IconFeather from 'react-native-vector-icons/Feather';
 
 export const Button = styled(RectButton).attrs({
-    rippleColor: 'rgba(103, 52, 255, 0.8)'
+    rippleColor: 'rgba(103, 52, 255, 0.4)'
 })`
     width: ${RFValue(56)}px; 
     height: ${RFValue(56)}px; 

@@ -2,42 +2,31 @@ import React, { useRef, useState } from 'react'
 import { LoginButton } from '../../components/LoginButton'
 import { Container, Footer, LoginWrapper, Header, Logo, SignInTitle, Title, TitleWrapper, CreateAccountWrapper, CreateAccountButton, ButtonText, CreateAccountText } from './styles'
 import auth from '@react-native-firebase/auth'
-import { Modal } from 'react-native'
 import { SignInModal } from '../SignInModal'
 import { LogInModal } from '../LogInModal'
 import { Modalize } from 'react-native-modalize'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export function SignIn() {  
-    const [signInModalOpen, setSignInModalOpen] = useState(false);
-    const [logInModalOpen, setlogInModalOpen] = useState(false);
 
-    const modalizeRef = useRef<Modalize>(null);
+    const signInRef = useRef<Modalize>(null);
+    const logInRef = useRef<Modalize>(null);
 
-    function onOpen() {
-    modalizeRef.current?.open();
+    function handleOpenSignIn() {
+        signInRef.current?.open();
+    };
+
+    function handleOpenLogIn() {
+        logInRef.current?.open();
+    };
+
+    function handleCloseLogIn() {
+        logInRef.current?.close();
     };
 
     function onClose() {
-        modalizeRef.current?.close();
-        };
-
-    function handleOpenLoginModal() {
-        setlogInModalOpen(true);
-    }
-
-    function handleCloseLoginModal() {
-        setlogInModalOpen(false);
-    }
-
-    function handleOpenSigninModal() {
-        setSignInModalOpen(true);
-    }
-
-    function handleCloseSigninModal() {
-        setSignInModalOpen(false);
-    }
-
+        signInRef.current?.close();
+    };
+    
     async function handleSignInAnonimously() {
         auth().signInAnonymously();
     }  
@@ -67,12 +56,12 @@ export function SignIn() {
                     />
                     <LoginButton 
                     title="Entrar com email e senha"
-                    onPress={handleOpenLoginModal}
+                    onPress={handleOpenLogIn}
                     source={require('../../assets/icons/o-email.png')}
                     />
                     <CreateAccountWrapper>
                         <CreateAccountText>Não tem uma conta?</CreateAccountText>
-                        <CreateAccountButton onPress={onOpen}>
+                        <CreateAccountButton onPress={handleOpenSignIn}>
                             <ButtonText>Criar conta</ButtonText>
                         </CreateAccountButton>
                     </CreateAccountWrapper>
@@ -80,17 +69,18 @@ export function SignIn() {
                 </LoginWrapper>
             </Footer>
            
-            <Modalize ref={modalizeRef}>
+            <Modalize ref={signInRef} modalHeight={650}>
                 <SignInModal 
                     closeSignInModal={onClose}
                 />    
             </Modalize>
             
-            <Modal visible={logInModalOpen}>
+            <Modalize ref={logInRef} modalHeight={570}>
                 <LogInModal 
-                    closeLoginModal={handleCloseLoginModal}
-                />
-            </Modal>
+                    closeLoginModal={handleCloseLogIn}
+                />    
+            </Modalize>
+
         </Container>
     )
 }
